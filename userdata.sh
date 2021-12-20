@@ -35,7 +35,7 @@ cd /root
 
     if [ ! -d sentry/sentry-self-hosted-tools ]; then
       cd sentry
-        git clone https://github.com/matti/self-hosted
+        git clone https://github.com/matti/sentry-self-hosted-tools
       cd ..
     fi
     ./install.sh --no-user-prompt
