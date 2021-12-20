@@ -22,16 +22,14 @@ cd /root
     chmod +x /usr/local/bin/docker-compose
   fi
 
-  if [ ! -d self-hosted ]; then
-    git clone https://github.com/matti/self-hosted
-  fi
+  set +e
+    docker volume ls -q | grep sentry- | xargs docker volume rm -f
+  set -e
+
+  rm -rf self-hosted
+  git clone https://github.com/matti/self-hosted
 
   cd self-hosted
-    git checkout master
-    set +e
-      git branch delete -D latest
-    set -e
-
     git fetch --all --tags
     git checkout "tags/${SENTRY_TAG}" -b latest
 
