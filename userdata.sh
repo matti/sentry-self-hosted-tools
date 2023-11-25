@@ -17,11 +17,6 @@ cd /root
     curl -fsSL https://get.docker.com | sh
   fi
 
-  if ! command -v docker-compose; then
-    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-  fi
-
   set +e
     docker volume ls -q | grep sentry- | xargs docker volume rm -f
   set -e
@@ -40,10 +35,10 @@ cd /root
     fi
     ./install.sh --no-user-prompt
 
-    docker-compose up -d
+    docker compose up -d
 
     while true; do
-      docker-compose exec -T web sentry createuser --email "${SENTRY_EMAIL}" --password "${SENTRY_PASSWORD}" --superuser && break
+      docker compose exec -T web sentry createuser --email "${SENTRY_EMAIL}" --password "${SENTRY_PASSWORD}" --superuser && break
       sleep 1
     done
 
@@ -54,6 +49,6 @@ cd /root
       echo "name: $name"
       echo "id: $id"
 
-      docker-compose exec -T web sentry exec /etc/sentry/sentry-self-hosted-tools/project-create-static.py --name "${name}" --id "${id}"
+      docker compose exec -T web sentry exec /etc/sentry/sentry-self-hosted-tools/project-create-static.py --name "${name}" --id "${id}"
     done
     screen -dmS fwd-80-to-9000 /usr/bin/socat TCP-LISTEN:80,fork TCP:127.0.0.1:9000
