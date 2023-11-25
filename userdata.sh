@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # requires 4 cpu, 8gb ram says installer
 
-set -euo pipefail
+set -eEuo pipefail
 
-SENTRY_EMAIL=${SENTRY_EMAIL:-test@example.com}
-SENTRY_PASSWORD=${SENTRY_PASSWORD:-password}
-SENTRY_TAG="${SENTRY_TAG:-21.12.0}"
-SENTRY_PROJECTS="${SENTRY_PROJECTS:-}"
+export DEBIAN_FRONTEND=noninteractive
+
+export SENTRY_EMAIL=${SENTRY_EMAIL:-test@example.com}
+export SENTRY_PASSWORD=${SENTRY_PASSWORD:-password}
+export SENTRY_TAG="${SENTRY_TAG:-23.11.1}"
+# myproject:100
+export SENTRY_PROJECTS="${SENTRY_PROJECTS:-}"
 
 cd /root
 
@@ -17,12 +20,17 @@ cd /root
     curl -fsSL https://get.docker.com | sh
   fi
 
+  until docker ps; do
+    echo "Waiting for docker to start..."
+    sleep 1
+  done
+
   set +e
     docker volume ls -q | grep sentry- | xargs docker volume rm -f
   set -e
 
   rm -rf self-hosted
-  git clone https://github.com/matti/self-hosted
+  git clone https://github.com/getsentry/self-hosted
 
   cd self-hosted
     git fetch --all --tags
@@ -33,7 +41,7 @@ cd /root
         git clone https://github.com/matti/sentry-self-hosted-tools
       cd ..
     fi
-    ./install.sh --no-user-prompt
+    ./install.sh --skip-user-creation --no-report-self-hosted-issues
 
     docker compose up -d
 
