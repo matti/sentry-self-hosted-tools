@@ -7,7 +7,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 export SENTRY_EMAIL=${SENTRY_EMAIL:-test@example.com}
 export SENTRY_PASSWORD=${SENTRY_PASSWORD:-password}
-export SENTRY_TAG="${SENTRY_TAG:-24.5.1}"
+export SENTRY_TAG="${SENTRY_TAG:-23.11.1}" # newer ones do not work
 # myproject:100
 export SENTRY_PROJECTS="${SENTRY_PROJECTS:-}"
 
