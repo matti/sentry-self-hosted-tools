@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# requires 4 cpu, 8gb ram says installer
+# requires 4 cpu, 16gb ram says installer
 
 set -eEuo pipefail
 
@@ -41,7 +41,7 @@ cd /root
         git clone https://github.com/matti/sentry-self-hosted-tools
       cd ..
     fi
-    ./install.sh --skip-user-creation --no-report-self-hosted-issues
+    ./install.sh --skip-user-creation --no-report-self-hosted-issues || echo "this started to exit, so we ignore it"
 
     docker compose up -d
 
@@ -51,8 +51,8 @@ cd /root
     done
 
     for project in ${SENTRY_PROJECTS}; do
-      name=$(echo $project | cut -d: -f1)
-      id=$(echo $project | cut -d: -f2)
+      name=$(echo "$project" | cut -d: -f1)
+      id=$(echo "$project" | cut -d: -f2)
 
       echo "name: $name"
       echo "id: $id"
