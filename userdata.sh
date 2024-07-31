@@ -14,7 +14,7 @@ export SENTRY_PROJECTS="${SENTRY_PROJECTS:-}"
 cd /root
 
   apt-get update && apt-get upgrade -y
-  apt-get install -y git screen socat
+  apt-get install -y git screen socat curl
 
   if ! command -v docker; then
     curl -fsSL https://get.docker.com | sh
